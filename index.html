@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="card">
+        <div class="search">
+            <input type="text" id="place" name="place" placeholder="Enter place" spellcheck="false">
+            <button onclick="checkWeather()"><img src="weather-app-img/images/search.png" alt="Search"></button>
+        </div>
+        <div class="weather">
+            <img src="weather-app-img/images/rain.png" class="weather-icon" alt="Weather Icon">
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">New York</h2>
+            <div class="details">
+                <div class="cols">
+                    <img src="weather-app-img/images/humidity.png" alt="Humidity Icon">
+                    <div>
+                        <p class="humidity">50%</p>
+                        <p>Humidity</p>
+                    </div>
+                </div>
+                <div class="cols">`
+                    <img src="weather-app-img/images/wind.png" alt="Wind Icon">
+                    <div>
+                        <p class="windspeed">15 km/h</p>
+                        <p>Wind Speed</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const apiKey = "0e372d5fdd6bf4278b2ff8657a1f14cd";
+
+        async function checkWeather() {
+            const place = document.getElementById('place').value;
+            const apiUrl = `https://api.openweathermap.org/data/2.5/weather?units=metric&q=${place}&appid=${apiKey}`;
+            const response = await fetch(apiUrl);
+            if (response.ok) {
+                const data = await response.json();
+                console.log(data);
+                updateWeather(data);
+            } else {
+                console.error("Failed to fetch weather data");
+            }
+        }
+
+        function updateWeather(data) {
+            document.querySelector('.temp').textContent = `${data.main.temp}°C`;
+            document.querySelector('.city').textContent = data.name;
+            document.querySelector('.humidity').textContent = `${data.main.humidity}%`;
+            document.querySelector('.windspeed').textContent = `${data.wind.speed} km/h`;
+            // Update weather icon and other details as needed
+        }
+
+        document.querySelector('.search button').addEventListener('click', checkWeather);
+
+        checkWeather(); // Initial call to fetch weather for the default city (Bangalore)
+    </script>
+</body>
+</html>
